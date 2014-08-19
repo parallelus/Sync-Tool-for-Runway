@@ -1,0 +1,23 @@
+.connection-status-success {
+	color: green;
+}
+
+.connection-status-failed {
+	color: red;
+}
+
+.nav-tabs-second{
+	padding-left: 20px;
+}
+
+.paginator{
+	text-align: center;
+}
+
+.connect-to-serv {
+	padding-top: 10px;
+}
+
+.ui-widget-overlay {
+    position: fixed;
+}
