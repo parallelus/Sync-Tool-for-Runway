@@ -17,19 +17,19 @@ $fields = array(
 $default = array();
 
 $settings = array(
-	'name' => __('Sync tool', 'framework'),
+	'name' => __('Sync tool', 'runway'),
 	'option_key' => $shortname.'sync-tool',
 	'fields' => $fields,
 	'default' => $default,
 	'parent_menu' => 'settings',
 	'menu_permissions' => 'administrator',
 	'file' => __FILE__,
-	'js' => array(		
+	'js' => array(
 		FRAMEWORK_URL.'extensions/sync-tool/js/sync-tool-connections.js',
 		'jquery-ui-core',
 		'jquery-ui-dialog',
 	),
-	'css' => array(		
+	'css' => array(
 		FRAMEWORK_URL.'extensions/sync-tool/css/style.css',
 	),
 );
@@ -39,7 +39,7 @@ include 'object.php';
 $sync_tool = new Sync_Tool_Object( $settings );
 
 // Load admin components
-if ( is_admin() ) {	
+if ( is_admin() ) {
 	include 'settings-object.php';
 	$sync_tool_admin = new Sync_Tool_Admin_Object( $settings );
 }

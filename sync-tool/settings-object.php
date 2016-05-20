@@ -6,8 +6,8 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 	public $data, $webserv_path, $response;
 
 	// remote call methods list
-	private $remote_actions = array( 'method_test', 'get_extensions_data', 'ping', 'get_all_data', 
-	'get_posts',	'get_categories', 'get_tags', 'get_plugins', 'get_users', 'get_themes', 
+	private $remote_actions = array( 'method_test', 'get_extensions_data', 'ping', 'get_all_data',
+	'get_posts',	'get_categories', 'get_tags', 'get_plugins', 'get_users', 'get_themes',
 	'export_options', 'create_categories', 'create_posts', 'create_tags', 'create_users', 'get_items_count',
 	'get_permissions');
 
@@ -27,7 +27,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 
 		$this->server_settings = get_option( $this->settings['option_key'] );
 
-		add_action( 'init', array( $this, 'append_hooks' ) );		
+		add_action( 'init', array( $this, 'append_hooks' ) );
 	}
 
 	public function append_hooks() {
@@ -45,22 +45,22 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 
 	public function ping() {
 
-		$this->response->message = __('Connected', 'framework');
+		$this->response->message = __('Connected', 'runway');
 
-	} 
+	}
 
-	public function prepare_authentication($connection = array()) {		
-		switch($connection['type']) {			
+	public function prepare_authentication($connection = array()) {
+		switch($connection['type']) {
 			case 'account_based': {
 				return array('type' => $connection['type'], 'login' => $connection['login'], 'password' => $connection['password']);
 			} break;
-			
+
 			case 'key_based': {
 				return array('type' => $connection['type'], 'key' => $connection['access_key']);
 			} break;
 
 			default: {
-				return false;				
+				return false;
 			} break;
 		}
 	}
@@ -83,7 +83,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		);
 
 		// set request options
-		$opts = array( 
+		$opts = array(
 			'http' => array(
 				'method'  => 'POST',
 				'header'  => 'Content-type: application/x-www-form-urlencoded',
@@ -105,12 +105,12 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 			$file = $url . '/wp-admin/admin-ajax.php?action=sync';
 			$file_headers = @get_headers($file);
 			$exists = ( isset($file_headers[0] ) )? true : false;
-			
+
 			/*if( $exists )
 				return json_decode( file_get_contents( $url . '/wp-admin/admin-ajax.php?action=sync', false, $context ), true );
 			else
 				return false;*/
-			
+
 			if( $exists ) {
 				$response = wp_remote_post($url . '/wp-admin/admin-ajax.php?action=sync&'.$postdata);
 				return json_decode($response['body'], true);
@@ -127,15 +127,15 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		// check is method allowd for remote call
 		if ( in_array( $request['action'], $this->remote_actions ) ) {
 			// check permisiions on operation
-			if(($request['resource'] == 'service' && $request['operation'] == 'service') || 
+			if(($request['resource'] == 'service' && $request['operation'] == 'service') ||
 				in_array($request['resource'], $this->server_settings['permissions'][$request['operation']])
 				){
-				// run method		
+				// run method
 				$this->$request['action']( isset($request['params']) ? $request['params'] : array() );
 			}
 			else{
 				$this->response->state[] = 'refused';
-				$this->response->state[] = 'access-denied';	
+				$this->response->state[] = 'access-denied';
 			}
 		} else {
 			$this->response->state[] = 'refused';
@@ -146,7 +146,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 	// accept connections
 	public function accept_sync_connection() {
 
-		extract( $_REQUEST );	
+		extract( $_REQUEST );
 
 		if(!isset($this->response))
 			$this->response = new stdClass();
@@ -196,7 +196,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 				$this->response->state[] = 'wrong-authentication-type';
 			} break;
 		}
-		
+
 		if(!isset($this->response->state))
 			$this->response->state = array();
 
@@ -212,7 +212,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 	}
 
 	// Geting data from extensions
-	public function get_extensions_data($params = array()) {		
+	public function get_extensions_data($params = array()) {
 		global $extm;
 		$themeInfo = rw_get_theme_data();
 		$data = array();
@@ -250,7 +250,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 
 				case 'options-builder':{
 						global $apm;
-						$data['core_extensions'][$value]['option_key'] = $option_key;						
+						$data['core_extensions'][$value]['option_key'] = $option_key;
 						$data['core_extensions'][$key]['data'] = $apm->get_pages_list();
 					} break;
 
@@ -265,7 +265,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		return $data;
 	}
 
-	public function get_posts($params = array()){ 
+	public function get_posts($params = array()){
 		$args = array(
 			'posts_per_page' => -1
 		);
@@ -302,7 +302,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		// TODO: get all themes from server
 	}
 
-	public function get_all_data(){		
+	public function get_all_data(){
 		$all_data->extensions_data = $this->get_extensions_data();
 		$all_data->posts = $this->get_posts();
 		$all_data->categories = $this->get_categories();
@@ -327,7 +327,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		return $this->server_settings['permissions'];
 	}
 
-	public function generate_key() {		
+	public function generate_key() {
 		$key = md5( uniqid() );
 		update_option( $this->key_option_id, $key );
 		return $key;
@@ -356,13 +356,13 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		);
 
 		$differencies['same_extensions'] = array_intersect_key(
-			(array)$server_extensions['active_exts'], 
+			(array)$server_extensions['active_exts'],
 			(array)$local_extensions['active_exts']);
 
 		$diff_exts = array_diff_key(
-			(array)$server_extensions['active_exts'], 
+			(array)$server_extensions['active_exts'],
 			(array)$local_extensions['active_exts']);
-		
+
 		foreach ($diff_exts as $key => $value) {
 			if(file_exists($extm->extensions_dir.$key)){
 				$differencies['must_be_active'][$key] = $value;
@@ -379,14 +379,14 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		$themeInfo = rw_get_theme_data();
 		$option_key = explode( '/', $params['extension'] );
 		$option_key = $themeInfo['Folder'].'_'.$option_key[0];
-		
+
 		update_option($option_key, $params['export_data']['data']);
-	
+
 		$this->response->export['option_key'] = $option_key;
 		$this->response->export['data'] = $params['export_data']['data'];
 	}
 
-	public function create_categories($params = array()){		
+	public function create_categories($params = array()){
 		$result = wp_create_category($params['name']);
 		$response = array();
 		if($result != 0){
@@ -399,7 +399,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 			$this->response['result_message'] = $response['result_message'] = 'Creation category "'.$params['name'].'" failed';
 		}
 		return $response;
-	}		
+	}
 
 	public function create_posts($params = array()){
 		unset($params['ID'], $params['post_name'], $params['guid']);
@@ -418,7 +418,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		return $response;
 	}
 
-	public function create_tags($params = array()){		
+	public function create_tags($params = array()){
 		$result = wp_create_tag($params['name']);
 		$response = array();
 		if($result != 0){
@@ -442,7 +442,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 			$wpdb->insert(
 				$wpdb->prefix.'users',
 				array(
-					'user_login' => $params['data']['user_login'], 
+					'user_login' => $params['data']['user_login'],
 					'user_pass' => $params['data']['user_pass'],
 					'user_nicename' => $params['data']['user_nicename'],
 					'user_email' => $params['data']['user_email'],
@@ -533,13 +533,13 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 			case 'key_based':{
 				$new_connection['access_key'] = $_POST['access_key'];
 				$this->server_settings['connections'][$slug] = $new_connection;
-			} break;			
+			} break;
 
 			case 'account_based':{
 				$new_connection['login'] = $_POST['login'];
 				$new_connection['password'] = $_POST['password'];
 				$this->server_settings['connections'][$slug] = $new_connection;
-			} break;			
+			} break;
 		}
 		update_option($this->option_key, $this->server_settings);
 	}
@@ -550,7 +550,7 @@ class Sync_Tool_Admin_Object extends Runway_Admin_Object {
 		}
 		unset($this->server_settings['connections'][$slug]);
 		update_option($this->option_key, $this->server_settings);
-	}	
+	}
 }
 
 ?>

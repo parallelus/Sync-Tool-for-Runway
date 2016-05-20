@@ -1,10 +1,10 @@
 <div class="nav-tabs">
 
 	<h2 class="nav-tab-wrapper tab-controlls" style="padding-top: 9px;">
-		<a href="<?php echo $this->self_url(); ?>" class="nav-tab <?php if($this->navigation == '') {echo "nav-tab-active";} ?>"><?php _e('Dashboard', 'framework') ?></a>
-		<a href="<?php echo $this->self_url('connections'); ?>" class="nav-tab <?php if($this->navigation == 'connections') {echo "nav-tab-active";} ?>"><?php _e('Connection tool', 'framework') ?></a>
-		<a href="<?php echo $this->self_url('server-settings'); ?>" class="nav-tab <?php if($this->navigation == 'server-settings') {echo "nav-tab-active";} ?>"><?php _e('Server settings', 'framework') ?></a>
-		<!-- <a href="<?php echo $this->self_url('test-connection'); ?>" class="nav-tab <?php if($this->navigation == 'server-settings') {echo "nav-tab-active";} ?>"><?php _e('Test connection', 'framework'); ?></a> -->
+		<a href="<?php echo $this->self_url(); ?>" class="nav-tab <?php if($this->navigation == '') {echo "nav-tab-active";} ?>"><?php _e('Dashboard', 'runway') ?></a>
+		<a href="<?php echo $this->self_url('connections'); ?>" class="nav-tab <?php if($this->navigation == 'connections') {echo "nav-tab-active";} ?>"><?php _e('Connection tool', 'runway') ?></a>
+		<a href="<?php echo $this->self_url('server-settings'); ?>" class="nav-tab <?php if($this->navigation == 'server-settings') {echo "nav-tab-active";} ?>"><?php _e('Server settings', 'runway') ?></a>
+		<!-- <a href="<?php echo $this->self_url('test-connection'); ?>" class="nav-tab <?php if($this->navigation == 'server-settings') {echo "nav-tab-active";} ?>"><?php _e('Test connection', 'runway'); ?></a> -->
 	</h2>
 
 </div>
@@ -18,13 +18,13 @@
 		if(empty($this->action)) {
 			$this->action = $this->navigation;
 		}
-		
-		if( isset($_GET['connection_id']) ) {					
+
+		if( isset($_GET['connection_id']) ) {
 			$connection_id = $_GET['connection_id'];
 			$connection = $this->server_settings['connections'][$connection_id];
 
 		}
-		switch($this->action) {			
+		switch($this->action) {
 			case 'ping': {
 				$connection_id = $_GET['connection_id'];
 				$connection = $this->server_settings['connections'][$connection_id];
@@ -40,10 +40,10 @@
 					$ping_response = request($connection, 'ping');
 					$ping_response_list[] = array( 'connection' => $server['connection_name'],
 											   'state' => isset($ping_response)? $ping_response['state'] : '',
-											   'message' => isset($ping_response)? $ping_response['message'] : '');				
+											   'message' => isset($ping_response)? $ping_response['message'] : '');
 					}
 				include 'views/sync-tool-connections.php';
-				} break;				
+				} break;
 			case 'connection': {
 				// TODO: Need to be added checking if connection does not exist
 				if( !isset($connection) ) {
@@ -64,15 +64,15 @@
 						$ping_response = request($connection, 'ping');
 						$data_count_local = $sync_tool_admin->get_items_count();
 						$data_count_server = request($connection, 'get_items_count');
-					}					
+					}
 
 					// import-export START
 					$operation = (isset($_REQUEST['operation'])) ? $_REQUEST['operation'] : 'import';
 					if( isset($operation)  && isset($_REQUEST['what'])) {
 						$what = $_REQUEST['what'];
 						switch ($operation) {
-							case 'import': {	
-								if(isset($_REQUEST['item-id'])){		
+							case 'import': {
+								if(isset($_REQUEST['item-id'])){
 									$item_id = $_REQUEST['item-id'];
 									$data = request($connection, 'get_'.$what);
 									if(isset($data['state'][0]) && $data['state'][0] == 'success'){
@@ -80,7 +80,7 @@
 									}
 									$func = 'create_'.$what;
 								    $response = $sync_tool_admin->$func($data);
-								    $message = rf__($response['result_message']) . ' ' . __('on your site', 'framework');
+								    $message = rf__($response['result_message']) . ' ' . __('on your site', 'runway');
 								}
 							} break;
 
@@ -93,7 +93,7 @@
 									$func = 'create_'.$what;
 
 									$response = request($connection, $func, $what, $operation, $data);
-									$message = rf__($response['result_message']) . ' ' . __('on server', 'framework');
+									$message = rf__($response['result_message']) . ' ' . __('on server', 'runway');
 								}
 							} break;
 
@@ -118,21 +118,21 @@
 								    	$fail++;
 								    }
 							    }
-							    
+
 							    $message = '';
 
 							    if($success != 0){
-							    	$message .= __("Imported", 'framework').' '.rf__($success).' '.rf__($what).'.';
-							    }								    
+							    	$message .= __("Imported", 'runway').' '.rf__($success).' '.rf__($what).'.';
+							    }
 							    if($fail != 0){
-							    	$message .= __("Failed import", 'framework').' '.rf__($fail).' '.rf__($what).'.';
+							    	$message .= __("Failed import", 'runway').' '.rf__($fail).' '.rf__($what).'.';
 							    }
 							} break;
 
 							case 'export-all': {
 								$func = 'get_'.$what;
 								$data = $sync_tool_admin->$func();
-								
+
 								$func = 'create_'.$what;
 								$success = 0;
 								$fail = 0;
@@ -147,21 +147,21 @@
 								    	$fail++;
 								    }
 							    }
-							    
+
 							    $message = '';
 
 							    if($success != 0){
-							    	$message .= __("Exported", 'framework').' '.rf__($success).' '.rf__($what).'.';
-							    }								    
+							    	$message .= __("Exported", 'runway').' '.rf__($success).' '.rf__($what).'.';
+							    }
 
 							    if($fail != 0){
-							    	$message .= __("Failed export", 'framework').' '.rf__($fail).' '.rf__($what).'.';							    	
+							    	$message .= __("Failed export", 'runway').' '.rf__($fail).' '.rf__($what).'.';
 							    }
 							} break;
 						}
 					}
 					$operation = str_replace('-all', '', $operation);
-					// import-export END		
+					// import-export END
 				}
 			} break;
 
@@ -233,7 +233,7 @@
 				$local_data = $sync_tool_admin->get_extensions_data();
 
 				$diff_extensions = $sync_tool_admin->get_extensions_differencies(
-					$local_data, 
+					$local_data,
 					$server_data['extensions_data']
 				);
 
@@ -248,8 +248,8 @@
 
 						} break;
 
-						case 'export':{										
-							$data['export_data'] = $local_data['active_exts'][$extension];	
+						case 'export':{
+							$data['export_data'] = $local_data['active_exts'][$extension];
 							$data['extension'] = $extension;
 							$response = request($connection, 'export_options', 'extensions', 'export', $data);
 
@@ -257,14 +257,14 @@
 					}
 
 				include_once 'views/sync-tool-merge-extensions.php';
-			} break;			
+			} break;
 
 			case 'import-posts':{
 				$server_posts = request($connection, 'get_posts', 'posts', $operation);
 				if(isset($server_posts['state'][0]) && $server_posts['state'][0] == 'success'){
 					$server_posts = $server_posts['posts'];
 				}
-				
+
 				include_once 'views/'.$operation.'/'.$operation.'-posts.php';
 			} break;
 
@@ -279,13 +279,13 @@
 				if(isset($server_categories['state'][0]) && $server_categories['state'][0] == 'success'){
 					$server_categories = $server_categories['categories'];
 				}
-				
+
 				include_once 'views/'.$operation.'/'.$operation.'-categories.php';
 			} break;
 
 			case 'export-categories':{
 				$local_categories = $sync_tool_admin->get_categories();
-				
+
 				include_once 'views/'.$operation.'/'.$operation.'-categories.php';
 			} break;
 
@@ -300,25 +300,25 @@
 
 			case 'export-tags':{
 				$local_tags = $sync_tool_admin->get_tags();
-				
+
 				include_once 'views/'.$operation.'/'.$operation.'-tags.php';
 			} break;
 
-			case 'import-plugins':{				
+			case 'import-plugins':{
 				$server_plugins = request($connection, 'get_plugins', $what, $operation);
 				if(isset($server_plugins['state'][0]) && $server_plugins['state'][0] == 'success'){
 					$server_plugins = $server_plugins['plugins'];
 				}
-				
+
 				include_once 'views/'.$operation.'/'.$operation.'-plugins.php';
-			} break;			
+			} break;
 
 			case 'import-users':{
 				$server_users = request($connection, 'get_users', $what, $operation);
 				if(isset($server_users['state'][0]) && $server_users['state'][0] == 'success'){
 					$server_users = $server_users['users'];
 				}
-				
+
 				include_once 'views/'.$operation.'/'.$operation.'-users.php';
 			} break;
 
@@ -336,11 +336,11 @@
 	  //           	'resource' => 'service',
 	  //           	'operation' => 'service',
 		 //    	);
-				
+
 			// 	$sync_tool_admin->process_request($args);
 
 			// 	include_once 'views/'.$operation.'/'.$operation.'-users.php';
-			// } break;			
+			// } break;
 
 			default: {
 				include 'views/sync-tool-dashboard.php';

@@ -1,53 +1,53 @@
 <br>
-	<a href="options-general.php?page=sync-tool&navigation=connections" id="add-new-connection" class="add-new-h2"><?php echo __('Add New Item', 'framework'); ?></a>
-	<a href="options-general.php?page=sync-tool&navigation=ping&action=ping-all" id="ping-all" class="add-new-h2"><?php echo __('Ping All', 'framework'); ?></a>
+	<a href="options-general.php?page=sync-tool&navigation=connections" id="add-new-connection" class="add-new-h2"><?php echo __('Add New Item', 'runway'); ?></a>
+	<a href="options-general.php?page=sync-tool&navigation=ping&action=ping-all" id="ping-all" class="add-new-h2"><?php echo __('Ping All', 'runway'); ?></a>
 <br><br>
 <!-- Add connection dialog -->
-<div id="new-connection-dialog" style="display:none;">		
-	<table> 
-		<tr>
-			<td><?php echo __('Connect with:', 'framework'); ?></td>
-			<td>
-				<label><input id="r-connect-with-key" type="radio" class="check-connection" name="check-connection" checked="true" value="connect-with-key"><?php echo __('Access Key', 'framework'); ?></label>
-				<label><input id="r-connect-with-login" type="radio" class="check-connection" name="check-connection" value="connect-with-login"><?php echo __('Login and password', 'framework'); ?></label>
-			</td>
-		</tr>
-	</table>	
+<div id="new-connection-dialog" style="display:none;">
 	<table>
 		<tr>
-			<td><?php echo __('URL:', 'framework'); ?></td>
+			<td><?php echo __('Connect with:', 'runway'); ?></td>
+			<td>
+				<label><input id="r-connect-with-key" type="radio" class="check-connection" name="check-connection" checked="true" value="connect-with-key"><?php echo __('Access Key', 'runway'); ?></label>
+				<label><input id="r-connect-with-login" type="radio" class="check-connection" name="check-connection" value="connect-with-login"><?php echo __('Login and password', 'runway'); ?></label>
+			</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td><?php echo __('URL:', 'runway'); ?></td>
 			<td><input type="text" id="server" value=""><br></td>
 		</tr>
 		<tr>
-			<td><?php echo __('Name:', 'framework'); ?></td>
+			<td><?php echo __('Name:', 'runway'); ?></td>
 			<td><input type="text" id="connection-name" value=""><br></td>
 		</tr>
 	</table><hr>
 	<div id="connect-with-key" class="connection-form">
-		<table>					
+		<table>
 			<tr>
-				<td><?php echo __('Access key:', 'framework'); ?></td>
+				<td><?php echo __('Access key:', 'runway'); ?></td>
 				<td><input type="text" id="access-key" value=""><br></td>
 			</tr>
 			<tr>
-				<td class="connect-to-serv"><a href="#" id="add-server-key" data-flag="add" class="button-primary"><?php echo __('Save settings', 'framework'); ?></a></td>
+				<td class="connect-to-serv"><a href="#" id="add-server-key" data-flag="add" class="button-primary"><?php echo __('Save settings', 'runway'); ?></a></td>
 			</tr>
-		</table>							
-	</div>			
+		</table>
+	</div>
 	<div id="connect-with-login" style="display:none;" class="connection-form">
 		<table>
 			<tr>
-				<td><?php echo __('Login:', 'framework'); ?></td>
+				<td><?php echo __('Login:', 'runway'); ?></td>
 				<td><input type="text" id="user-login"><br></td>
 			</tr>
 			<tr>
-				<td><?php echo __('Password:', 'framework'); ?></td>
+				<td><?php echo __('Password:', 'runway'); ?></td>
 				<td><input type="password" id="user-password"><br></td>
 			</tr>
 			<tr>
-				<td class="connect-to-serv"><a href="#" id="add-server-login" data-flag="add" class="button-primary"><?php echo __('Save settings', 'framework'); ?></a></td>
+				<td class="connect-to-serv"><a href="#" id="add-server-login" data-flag="add" class="button-primary"><?php echo __('Save settings', 'runway'); ?></a></td>
 			</tr>
-		</table>		
+		</table>
 	</div>
 </div>
 <div id="responce"></div>
@@ -58,15 +58,15 @@
 	<tr>
 		<th scope="col" style="width:0px;" id="cb" class="manage-column column-cb check-column" style="width: 0px;"><input type="checkbox" name="ext_chk[]" /></th>
 		<th id="name" class="manage-column column-name"><?php echo __('URL', 'frmework'); ?></th>
-		<th id="description" class="manage-column column-description"><?php echo __('Description', 'framework'); ?></th>
-		<th id="description" class="manage-column column-description"><?php echo __('Action', 'framework'); ?></th>
-		<th id="description" class="manage-column column-description"><?php echo __('Status', 'framework'); ?></th>
+		<th id="description" class="manage-column column-description"><?php echo __('Description', 'runway'); ?></th>
+		<th id="description" class="manage-column column-description"><?php echo __('Action', 'runway'); ?></th>
+		<th id="description" class="manage-column column-description"><?php echo __('Status', 'runway'); ?></th>
 	</tr>
 </thead>
 <tbody id="connections-list">
 	<?php if ( isset ( $this->server_settings['connections'] ) ): ?>
 		<?php foreach ((array)$this->server_settings['connections'] as $key => $value) :?>
-			<tr class="active" id="<?php echo $key; ?>" 
+			<tr class="active" id="<?php echo $key; ?>"
 				data-cn="<?php echo stripslashes( $value['connection_name'] ); ?>"
 				data-url="<?php echo $value['server_url']; ?>"
 				data-type="<?php echo $value['type']; ?>"
@@ -78,31 +78,31 @@
 				</td>
 				<td class="plugin-title" style="text-align:left;">
 					<?php echo stripslashes( $value['connection_name'] ) . ' ('.$value['server_url'].')'; ?>
-				</td>	
+				</td>
 				<td class="column-description desc">
 					<?php echo $value['type']; ?>
-				</td>	
+				</td>
 				<td class="column-description actions">
-					<span class="connect"><a href="options-general.php?page=sync-tool&navigation=connection&connection_id=<?php echo $key; ?>" title="<?php echo __('Connect', 'framework'); ?>" class="connect"><?php echo __('Connect', 'framework'); ?></a> | </span>
-					<span class="edit"><a href="#" title="<?php echo __('Edit', 'framework'); ?>" id="connection-edit" class="edit"><?php echo __('Edit', 'framework'); ?></a> | </span>
-					<span class="ping"><a href="options-general.php?page=sync-tool&navigation=ping&action=ping&connection_id=<?php echo $key; ?>" title="<?php echo __('Ping', 'framework'); ?>" class="ping"><?php echo __('Ping', 'framework'); ?></a> | </span>
-					<span class="delete"><a href="options-general.php?page=sync-tool&navigation=connection&action=delete-connection&connection_id=<?php echo $key; ?>" class="delete"><?php echo __('Delete', 'framework') ;?></a></span>
-				</td>	
+					<span class="connect"><a href="options-general.php?page=sync-tool&navigation=connection&connection_id=<?php echo $key; ?>" title="<?php echo __('Connect', 'runway'); ?>" class="connect"><?php echo __('Connect', 'runway'); ?></a> | </span>
+					<span class="edit"><a href="#" title="<?php echo __('Edit', 'runway'); ?>" id="connection-edit" class="edit"><?php echo __('Edit', 'runway'); ?></a> | </span>
+					<span class="ping"><a href="options-general.php?page=sync-tool&navigation=ping&action=ping&connection_id=<?php echo $key; ?>" title="<?php echo __('Ping', 'runway'); ?>" class="ping"><?php echo __('Ping', 'runway'); ?></a> | </span>
+					<span class="delete"><a href="options-general.php?page=sync-tool&navigation=connection&action=delete-connection&connection_id=<?php echo $key; ?>" class="delete"><?php echo __('Delete', 'runway') ;?></a></span>
+				</td>
 				<td class="column-description status">
 					<?php
 						$ping_response = request($value);
-						
+
 						if($ping_response['state'][0] == 'success'){
-							$state = __("AVAILABLE", 'framework');
+							$state = __("AVAILABLE", 'runway');
 						}
 						else {
-							$state = __("DISABLE", 'framework');
+							$state = __("DISABLE", 'runway');
 						}
 					?>
-					<p style="color:<?php echo ($state == __('AVAILABLE', 'framework')) ? 'Green' : 'Red'	; ?>"><?php echo $state; ?></p>
-				</td>	
+					<p style="color:<?php echo ($state == __('AVAILABLE', 'runway')) ? 'Green' : 'Red'	; ?>"><?php echo $state; ?></p>
+				</td>
 			</tr>
 		<?php endforeach; ?>
 	<?php endif ?>
 </tbody>
-</table>		
+</table>
